@@ -1,14 +1,24 @@
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted, watch } from "vue";
 import { db } from "./data/guitarras";
-import { onMounted } from "vue";
 
 import Guitarra from "./components/Guitarra.vue";
 import Header from "./components/Header.vue";
 import Footer from "./components/Footer.vue";
+
 const guitarras = ref(db);
 const guitarraHeader = ref(db[3]);
 const carrito = ref([]);
+
+watch(
+  carrito,
+  () => {
+    setLocalStorage();
+  },
+  {
+    deep: true,
+  }
+);
 
 onMounted(() => {
   const carritoStorage = localStorage.getItem("carrito");
@@ -27,23 +37,15 @@ const agregarCarrito = (guitarra) => {
   if (!existeElemento) {
     guitarra.cantidad = 1;
     carrito.value.push(guitarra);
-  } else {
-    guitarra.cantidad++;
-  }
-
-  setLocalStorage();
+  } else guitarra.cantidad++;
 };
 const sumarCarrito = (guitarra) => {
   if (guitarra.cantidad >= 10) alert("Cantidad Máxima Permitida");
-  else {
-    guitarra.cantidad++;
-  }
+  else guitarra.cantidad++;
 };
 const restarCarrito = (guitarra) => {
   if (guitarra.cantidad <= 1) alert("Cantidad Minima Permitida");
-  else {
-    guitarra.cantidad--;
-  }
+  else guitarra.cantidad--;
 };
 const eliminarCarrito = (guitarra) => {
   carrito.value = carrito.value.filter(
@@ -71,6 +73,7 @@ const vaciarCarrito = () => {
     <div class="row mt-5">
       <Guitarra
         v-for="guitarra in guitarras"
+        :key="guitarra.id"
         v-bind:guitarra="guitarra"
         @agregar-carrito="agregarCarrito"
       />

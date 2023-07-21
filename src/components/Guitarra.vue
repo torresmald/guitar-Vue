@@ -15,7 +15,7 @@ defineEmits(["agregar-carrito"]);
     <div class="col-4">
       <img
         class="img-fluid"
-        :src="'/public/img/' + guitarra.imagen + '.jpg'"
+        :src="'/img/' + guitarra.imagen + '.jpg'"
         :alt="'imagen guitarra ' + guitarra.nombre"
       />
     </div>
